@@ -128,19 +128,4 @@ public interface Map<K, V> extends Iterable<Map.KeyValuePair<K, V>>, Function<K,
    */
   boolean forall(Function<Map.KeyValuePair<K, V>, Boolean> predicate);
 
-
-  // ********************************* Mutating *************************************************
-  /**
-   * Modify all the values in this sequence to be the output of the provided function. Keys are
-   * not altered.
-   * @param f the function used to transform the values
-   */
-  void mappedValues(Function<V, V> f);
-
-  /**
-   * Modify the current collection to only include values that satisfy the predicate.
-   * @param predicate the predicate telling which key/value pairs to keep
-   */
-  void filtered(Function<Map.KeyValuePair<K, V>, Boolean> predicate);
-
 }

@@ -47,12 +47,6 @@ public class App {
                 case "forall":
                     testForall(map, rand);
                     break;
-                case "mapped":
-                    testMappedValues(map, rand);
-                    break;
-                case "filtered":
-                    testFiltered(map, rand);
-                    break;
             }
             printMapSums(map);
         }
@@ -61,7 +55,7 @@ public class App {
     static String randomString(Random rand, int len) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < len; ++i) {
-            sb.append('a'+rand.nextInt(26));
+            sb.append((char)('a'+rand.nextInt(26)));
         }
         return sb.toString();
     }
@@ -103,7 +97,7 @@ public class App {
             map.put(key, value);
         }
         for (Map.KeyValuePair<String, Integer> kvp: pairs) {
-            if (kvp.value() != map.get(kvp.key()).get()) {
+            if (!kvp.value().equals(map.get(kvp.key()).get())) {
                 System.out.println("put-get pair failed " + kvp.value() + " " + kvp.key() + " " + map.get(kvp.key()));
                 return;
             }
@@ -111,16 +105,16 @@ public class App {
     }
 
     static void testRemove(Map<String, Integer> map, Random rand) {
-        List<String> keys = selectedKeys(map, rand, 20);
+        List<String> keys = selectedKeys(map, rand, 10);
         for (String key: keys) {
             int len = map.size();
             var at = map.get(key);
             var removed = map.remove(key);
-            if (removed != at) {
+            if (!removed.equals(at)) {
                 System.out.println("Removed value doesn't match the get. " + at + " != " + removed);
                 return;
             }
-            if (map.size() != len-1) {
+            if (at.isPresent() && map.size() != len-1) {
                 System.out.println("Size didn't decrease by one on remove.");
                 return;
             }
@@ -141,14 +135,14 @@ public class App {
             var at = map.get(key);
             if (map.contains(key)) {
                 var goe = map.getOrElse(key, 999);
-                if (goe == 999) {
+                if (goe.equals(999)) {
                     System.out.println("Got default when contains says key is there.");
                 }
-                if (goe != at.get()) {
+                if (!goe.equals(at.get())) {
                     System.out.println("getOrElse disagrees with get when contains says key is there.");
                 }
             } else {
-                if (map.getOrElse(key, 999) != 999) {
+                if (!map.getOrElse(key, 999).equals(999)) {
                     System.out.println("Got non-default when contains says key is not there.");
                 }
                 if (at.isPresent()) {
@@ -167,15 +161,15 @@ public class App {
         for (String key: keySet) {
             cnt++;
             if (!map.contains(key)) {
-                System.out.println("Key set has key not in map.");
+                System.out.println("Key set has key not in map. " + key);
             }
         }
         if (cnt != map.size()) {
-            System.out.println("Key set iterator not the right length.");
+            System.out.println("Key set iterator not the right length. "+cnt+" != "+map.size());
         }
         for (Map.KeyValuePair<String, Integer> kvp: map) {
             if (!keySet.contains(kvp.key())) {
-                System.out.println("Key in map not in key set.");
+                System.out.println("Key in map not in key set. "+kvp.key());
             }
         }
     }
@@ -223,7 +217,7 @@ public class App {
             if (kvp.value() % 5 != 0) ++j;
             else break;
         }
-        if (div5loc.isPresent() && map.get(div5loc.get().key()).get() != div5loc.get().value() || !div5loc.isPresent() && j < map.size()) {
+        if (div5loc.isPresent() && !map.get(div5loc.get().key()).get().equals(div5loc.get().value()) || !div5loc.isPresent() && j < map.size()) {
             System.out.println("Find failed % 5.");
         }
 
@@ -234,7 +228,7 @@ public class App {
             if (kvp.value() <= bigVal) ++j;
             else break;
         }
-        if (bigloc.isPresent() && map.get(bigloc.get().key()).get() != bigloc.get().value() || !bigloc.isPresent() && j < map.size()) {
+        if (bigloc.isPresent() && !map.get(bigloc.get().key()).get().equals(bigloc.get().value()) || !bigloc.isPresent() && j < map.size()) {
             System.out.println("Find failed for big.");
         }
     }
@@ -278,14 +272,5 @@ public class App {
                 System.out.println("All keys matched single value.");
             }
         }
-    }
-
-    static void testMappedValues(Map<String, Integer> map, Random rand) {
-        map.mappedValues(i -> i / 2);
-    }
-
-    static void testFiltered(Map<String, Integer> map, Random rand) {
-        map.filtered(kvp -> kvp.value() % 2 == 0);
-        map.filtered(kvp -> kvp.key().contains("a"));
     }
 }

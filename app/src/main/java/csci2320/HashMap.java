@@ -51,6 +51,11 @@ public class HashMap<K, V> implements Map<K, V> {
   public Optional<V> put(K key, V value) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'put'");
+
+    // Implementation suggestion.
+    // Write this and test it first without growth.
+    // When you add the array growth, have the actual code in a separate function
+    // and do the growth after you add the new value.
   }
 
   @Override
@@ -87,6 +92,10 @@ public class HashMap<K, V> implements Map<K, V> {
   public Set<K> keySet() {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'keySet'");
+
+    // Implementation note. This can be done with an anonymous inner class.
+    // You can refer to the HashMap it is in with `HashMap.this`. So you
+    // can call things like `HashMap.this.contains`.
   }
   
   @Override
@@ -123,18 +132,6 @@ public class HashMap<K, V> implements Map<K, V> {
   public boolean forall(Function<Map.KeyValuePair<K, V>, Boolean> predicate) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'forall'");
-  }
-
-  @Override
-  public void mappedValues(Function<V, V> f) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'mappedValues'");
-  }
-
-  @Override
-  public void filtered(Function<Map.KeyValuePair<K, V>, Boolean> predicate) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'filtered'");
   }
 
   /**
