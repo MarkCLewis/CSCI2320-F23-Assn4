@@ -7,6 +7,40 @@ import java.util.function.Function;
 
 public class HashMap<K, V> implements Map<K, V> {
 
+  // I'm giving you some helper method to make testing easier.
+  @SuppressWarnings("unchecked")
+  public static <K, V> HashMap<K, V> of(Map.KeyValuePair<K, V>... elems) {
+    HashMap<K, V> ret = new HashMap<>();
+    for (var kvp: elems) ret.put(kvp.key(), kvp.value());
+    return ret;
+  }
+
+  @Override
+  public boolean equals(Object that) {
+    if (that == null || !(that instanceof HashMap)) return false;
+    HashMap<?, ?> thatSeq = (HashMap<?, ?>)that;
+    if (thatSeq.size() != size()) return false;
+    for (Iterator<?> iter1 = thatSeq.iterator(), iter2 = this.iterator(); iter1.hasNext();)
+      if (!iter1.next().equals(iter2.next())) return false;
+    return true;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("HashMap(");
+    boolean first = true;
+    for (var kvp: this) {
+      if (!first) {
+        sb.append(", " + kvp.key() +"->"+kvp.value());
+      } else {
+        sb.append(kvp.key() +"->"+kvp.value());
+        first = false;
+      }
+    }
+    sb.append(")");
+    return sb.toString();
+  }
+
   @Override
   public Iterator<KeyValuePair<K, V>> iterator() {
     // TODO Auto-generated method stub

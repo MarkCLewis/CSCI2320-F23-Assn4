@@ -17,6 +17,18 @@ public interface Map<K, V> extends Iterable<Map.KeyValuePair<K, V>>, Function<K,
   static record KeyValuePair<K, V>(K key, V value) {}
 
   /**
+   * This is just a shortcut so you can make pairs with Map.kvp(key, value).
+   * @param <K> key type
+   * @param <V> value type 
+   * @param key the key
+   * @param value the value
+   * @return a new KeyValuePair
+   */
+  static <K, V> KeyValuePair<K, V> kvp(K key, V value) {
+    return new KeyValuePair<K,V>(key, value);
+  }
+
+  /**
    * Associates a value with a key. If the key is already present, it will replace the
    * value and return the old one. If the key is not already present, this pair is added and
    * Optional.empty is returned.
