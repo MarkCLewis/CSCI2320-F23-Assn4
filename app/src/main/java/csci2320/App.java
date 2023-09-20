@@ -61,7 +61,7 @@ public class App {
     static String randomString(Random rand, int len) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < len; ++i) {
-            sb.append('a'+rand.nextInt(26));
+            sb.append((char)('a'+rand.nextInt(26)));
         }
         return sb.toString();
     }
