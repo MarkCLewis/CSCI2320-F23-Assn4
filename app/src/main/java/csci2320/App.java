@@ -6,7 +6,7 @@ package csci2320;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
+import java.util.Scanner;  
 
 public class App {
     public static final int KEY_LEN = 8;
