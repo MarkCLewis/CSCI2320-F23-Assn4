@@ -6,7 +6,7 @@ package csci2320;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;  
+import java.util.Scanner;
 
 public class App {
     public static final int KEY_LEN = 8;
@@ -71,9 +71,14 @@ public class App {
     }
 
     static List<String> selectedKeys(Map<String, Integer> map, Random rand, int estCount) {
+        List<String> allKeys = new ArrayList<>();
         List<String> ret = new ArrayList<>();
         for (Map.KeyValuePair<String, Integer> kvp: map) {
-            if (rand.nextInt(map.size()/estCount) == 0) ret.add(kvp.key());
+            allKeys.add(kvp.key());
+        }
+        allKeys.sort((i, j) -> i.compareTo(j));
+        for (var key: allKeys) {
+            if (rand.nextInt(map.size()/estCount) == 0) ret.add(key);
         }
         return ret;
     }
@@ -81,11 +86,13 @@ public class App {
     static void printMapSums(Map<String, Integer> map) {
         int sum = 0;
         int strSum = 0;
+        int cnt = 0;
         for (Map.KeyValuePair<String, Integer> kvp: map) {
             sum += kvp.value();
             strSum += kvp.key().hashCode();
+            cnt += 1;
         }
-        System.out.println(strSum+" "+sum);
+        System.out.println(cnt+" "+strSum+" "+sum);
     }
 
     static void testPutGet(Map<String, Integer> map, Random rand) {
@@ -197,7 +204,7 @@ public class App {
         int j = 0;
         for (Map.KeyValuePair<String, Integer> kvp: map) {
             if (kvp.value() % 2 == 0) {
-                if (kvp.value() != evens.get(kvp.key()).get()) {
+                if (!kvp.value().equals(evens.get(kvp.key()).get())) {
                     System.out.println("Filter match error.");
                     return evens;
                 }
@@ -212,23 +219,27 @@ public class App {
 
     static void testFind(Map<String, Integer> map, Random rand) {
         var div5loc = map.find(kvp -> kvp.value() % 5 == 0);
-        int j = 0;
+        String keyToFind = null;
         for(Map.KeyValuePair<String, Integer> kvp: map) {
-            if (kvp.value() % 5 != 0) ++j;
-            else break;
+            if (kvp.value() % 5 == 0) {
+                keyToFind = kvp.key();
+                break;
+            }
         }
-        if (div5loc.isPresent() && !map.get(div5loc.get().key()).get().equals(div5loc.get().value()) || !div5loc.isPresent() && j < map.size()) {
+        if (div5loc.isPresent() && !map.get(keyToFind).get().equals(div5loc.get().value()) || !div5loc.isPresent() && keyToFind != null) {
             System.out.println("Find failed % 5.");
         }
 
         final int bigVal = 1800000000;
         var bigloc = map.find(kvp -> kvp.value() > bigVal);
-        j = 0;
+        keyToFind = null;
         for(Map.KeyValuePair<String, Integer> kvp: map) {
-            if (kvp.value() <= bigVal) ++j;
-            else break;
+            if (kvp.value() > bigVal) {
+                keyToFind = kvp.key();
+                break;
+            }
         }
-        if (bigloc.isPresent() && !map.get(bigloc.get().key()).get().equals(bigloc.get().value()) || !bigloc.isPresent() && j < map.size()) {
+        if (bigloc.isPresent() && !map.get(keyToFind).get().equals(bigloc.get().value()) || !bigloc.isPresent() && keyToFind != null) {
             System.out.println("Find failed for big.");
         }
     }
