@@ -18,10 +18,12 @@ public class HashMap<K, V> implements Map<K, V> {
   @Override
   public boolean equals(Object that) {
     if (that == null || !(that instanceof HashMap)) return false;
-    HashMap<?, ?> thatSeq = (HashMap<?, ?>)that;
-    if (thatSeq.size() != size()) return false;
-    for (Iterator<?> iter1 = thatSeq.iterator(), iter2 = this.iterator(); iter1.hasNext();)
-      if (!iter1.next().equals(iter2.next())) return false;
+    @SuppressWarnings("unchecked")
+    HashMap<K, V> thatMap = (HashMap<K, V>)that;
+    if (thatMap.size() != size()) return false;
+    for (var kvp: this) {
+      if (thatMap.get(kvp.key()).filter(v -> v.equals(kvp.value())).isEmpty()) return false;
+    }
     return true;
   }
 
